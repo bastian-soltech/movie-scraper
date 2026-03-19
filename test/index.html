@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aelix Player Proxy</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body style="background:#000; color:cyan; text-align:center;">
+    <h1>AELIX PROXY PLAYER</h1>
+    <video id="video" controls autoplay width="800"></video>
+    <script>
+        const video = document.getElementById('video');
+        
+        const m3u8Source = `http://localhost:3000/api/stream`;
+
+        if (Hls.isSupported()) {
+            const hls =new Hls({
+    debug: false,
+    enableWorker: true,
+    lowLatencyMode: true,
+    backBufferLength: 90, // Simpan 90 detik video yang sudah ditonton di memori
+    maxBufferLength: 30,  // Buffer depan 30 detik
+    xhrSetup: function (xhr, url) {
+        if (url.includes('terabox.com') || url.includes('.ts')) {
+            const proxyUrl = `http://localhost:3000/api/proxy-video?url=${encodeURIComponent(url)}`;
+            xhr.open('GET', proxyUrl, true);
+        }
+    }
+});
+
+            hls.loadSource(m3u8Source);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+        }
+    </script>
+</body>
+</html>
