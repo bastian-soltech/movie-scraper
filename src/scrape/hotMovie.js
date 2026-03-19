@@ -19,7 +19,7 @@ const data = await fetch('https://api.ytbvideoly.com/api/resconsume/hotlist?res_
     }
 })
 const json = await data.json()
-console.log(json.data.detail[1])
+return json
 
 }
 
@@ -41,13 +41,26 @@ async function GetDetailMovie(enid) {
     }
 })
 const json = await data.json()
-console.log(json)
+const movieDetail = await json.data
+
+
+return {
+    movieDetail,
+ 
+
+}
+
+
+
+// return json
     
 }
 
 
-async function GetStreamMovie() {
-    const data = await fetch(`https://api.ytbvideoly.com/share/streaming?uk=4401094508863&shareid=35951197330&sign=9d06150a741b16b2da92bf646e749b263222af63&jsToken=ewre&type=M3U8_FLV_264_480&fid=162345422849116&esl=1&play_from=4khot_b&isplayer=1&ehps=1&clienttype=1&app_id=250528&web=1&channel=dubox&timestamp=177375439898989410`,{
+async function GetStreamMovie(uk,share_id,fid) {
+    // harus ganti timestamp
+    // parameter di dapat dari share_info
+    const data = await fetch(`https://api.ytbvideoly.com/share/streaming?uk=${uk}&shareid=${share_id}&sign=9d06150a741b16b2da92bf646e749b263222af63&jsToken=ewre&type=M3U8_FLV_264_480&fid=${fid}&esl=1&play_from=4khot_b&isplayer=1&ehps=1&clienttype=1&app_id=250528&web=1&channel=dubox&timestamp=${Date.now()}`,{
     headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
         'Origin': 'https://www.4khotvideo.com',
@@ -63,14 +76,12 @@ async function GetStreamMovie() {
         'TE': 'trailers'
     }
 })
-const json = await data.text()
-console.log(json)
+const urlRegex = /https?:\/\/[^\s]+/g;
+const movieStream = (await data.text()).match(urlRegex)
+
+return movieStream
     
 }
-
-GetStreamMovie()
-
-// type M3U8_FLV_264_480
 
 // parameter yang di butuhkan getstream
 // uk (uk)
@@ -78,5 +89,13 @@ GetStreamMovie()
 // fid (fs_id)
 // GetHotMovie()
 
-// GetDetailMovie()
 
+// async function main() {
+// const detailMovie = await GetDetailMovie('7JVBhH')
+// const streamMovie = await GetStreamMovie(detailMovie.movieDetail.share_info.uk,detailMovie.movieDetail.share_info.share_id,detailMovie.movieDetail.share_info.fs_id)
+// console.log(streamMovie)
+    
+// }
+// main()
+
+// module.exports = {GetHotMovie,GetStreamMovie,get}
