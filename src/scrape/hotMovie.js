@@ -88,6 +88,30 @@ return raw
     
 }
 
+export async function getSearch(query,page=1) {
+const data = await fetch(`https://api.ytbvideoly.com/api/resconsume/search?res_type=0&page=${page}&count=12&content=${query}&lang=PH&from_channel=11&hot_order_type=plays_pv&source_domain=www.4khotvideo.com`,{
+    headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'Origin': 'https://www.4khotvideo.com',
+        'Referer': 'https://www.4khotvideo.com/',
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br, zstd',
+        'Connection': 'keep-alive',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'Sec-GPC': '1',
+        'TE': 'trailers'
+    }
+})
+const json = await data.json()
+return json
+
+
+    
+}
+
 // parameter yang di butuhkan getstream
 // uk (uk)
 // shareid (share_id)

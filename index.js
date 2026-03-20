@@ -1,7 +1,7 @@
 import express from 'express'
 import axios from 'axios';
 import cors from 'cors'
-import { GetDetailMovie,GetStreamMovie,GetHotMovie } from './src/scrape/hotMovie.js';
+import { GetDetailMovie,GetStreamMovie,GetHotMovie, getSearch } from './src/scrape/hotMovie.js';
 
 const app = express();
 const PORT = 5000;
@@ -13,6 +13,15 @@ app.use(cors());
 app.get('/api/hot-movies', async (req, res) => {
     try {
         const response = await GetHotMovie()
+        res.json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+app.get('/api/search', async (req, res) => {
+    try {
+        const {query,page} = req.query
+        const response = await getSearch(query,page)
         res.json(response.data);
     } catch (error) {
         res.status(500).json({ error: error.message });
