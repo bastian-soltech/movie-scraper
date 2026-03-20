@@ -7,30 +7,42 @@
 <body style="background:#000; color:cyan; text-align:center;">
     <h1>AELIX PROXY PLAYER</h1>
     <video id="video" controls autoplay width="800"></video>
-    <script>
-        const video = document.getElementById('video');
-        
-        const m3u8Source = `http://localhost:3000/api/stream`;
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<video id="video" controls autoplay width="800"></video>
 
-        if (Hls.isSupported()) {
-            const hls =new Hls({
-    debug: false,
+<script>
+  const video = document.getElementById('video');
+  
+  // Ganti sesuai data film yang mau diputar
+  const params = "uk=4401094499391&shareid=2807324453&fid=37976682331932";
+  const m3u8Url = `http://localhost:5000/api/stream?${params}`;
+
+  if (Hls.isSupported()) {
+    const hls = new Hls({
+     // Ambil 3 segmen sekaligus di awal (biar gak buffering pas mulai)
+    maxBufferLength: 30, 
+    maxMaxBufferLength: 60,
+    // Mulai streaming segera setelah segmen pertama dapet
+    startLevel: -1,
+    abandonLoadTimeout: 3000,
+    // Gunakan web worker agar UI tidak lag saat remuxing .ts ke .mp4
     enableWorker: true,
-    lowLatencyMode: true,
-    backBufferLength: 90, // Simpan 90 detik video yang sudah ditonton di memori
-    maxBufferLength: 30,  // Buffer depan 30 detik
-    xhrSetup: function (xhr, url) {
-        if (url.includes('terabox.com') || url.includes('.ts')) {
-            const proxyUrl = `http://localhost:3000/api/proxy-video?url=${encodeURIComponent(url)}`;
-            xhr.open('GET', proxyUrl, true);
-        }
-    }
-});
+    // Tuning untuk koneksi cepat
+    fragLoadingRetryDelay: 500,
+    manifestLoadingRetryDelay: 500
+    });
 
-            hls.loadSource(m3u8Source);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-        }
-    </script>
+    hls.loadSource(m3u8Url);
+    hls.attachMedia(video);
+    
+    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+      video.play();
+    });
+  } 
+  else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    // Untuk Safari (iPhone/Mac)
+    video.src = m3u8Url;
+  }
+</script>
 </body>
 </html>
