@@ -10,9 +10,10 @@ const PORT = 5000;
 app.use(cors());
 
 
-app.get('/api/hot-movies', async (req, res) => {
+app.get('/api/hot-movies/:type', async (req, res) => {
     try {
-        const response = await GetHotMovie()
+        const type = req.params.type
+        const response = await GetHotMovie(type)
         res.json(response.data);
     } catch (error) {
         res.status(500).json({ error: error.message });
