@@ -11,10 +11,11 @@ const PORT = 5000;
 app.use(cors());
 
 
-app.get('/api/hot-movies/:type', async (req, res) => {
+app.get('/api/hot-movies/:type/:page', async (req, res) => {
     try {
         const type = req.params.type
-        const response = await GetHotMovie(type)
+        const page = req.params.page
+        const response = await GetHotMovie(type,page)
         res.json(response.data);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -60,10 +61,11 @@ app.get('/api/stream', async (req, res) => {
 });
 
 // V1 API for LK21 (layarkaca.id)
-app.get('/v1/api/hot-movies/:type', async (req, res) => {
+app.get('/v1/api/hot-movies/:type/:page', async (req, res) => {
     try {
         const type = req.params.type
-        const response = await lk21.GetHotMovie(type)
+        const page = req.params.page
+        const response = await lk21.GetHotMovie(type,page)
         res.json(response.data);
     } catch (error) {
         res.status(500).json({ error: error.message });
