@@ -1,7 +1,7 @@
 import express from 'express'
 import axios from 'axios';
 import cors from 'cors'
-import { GetDetailMovie,GetStreamMovie,GetHotMovie, getSearch } from './src/scrape/hotMovie.js';
+import { GetDetailMovie,GetStreamMovie,GetHotMovie, getSearch, getSeries } from './src/scrape/hotMovie.js';
 import * as lk21 from './src/scrape/lk21.js';
 
 const app = express();
@@ -57,6 +57,21 @@ app.get('/api/stream', async (req, res) => {
     } catch (error) {
         console.error("DETAIL ERROR:", error);
         res.status(500).send("Gagal generate playlist: " + error.message);
+    }
+});
+app.get('/api/get-series', async (req, res) => {
+    try {
+        const { id } = req.query;
+        
+        if (!id) {
+            return res.status(400).send("Parameter id wajib ada!");
+        }
+
+        const series = await getSeries(id);
+        res.json(series)
+    } catch (error) {
+        console.error("DETAIL ERROR:", error);
+        res.status(500).send("Gagal mengambil series: " + error.message);
     }
 });
 
