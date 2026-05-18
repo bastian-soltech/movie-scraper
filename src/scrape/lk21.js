@@ -23,8 +23,8 @@ return json
 
 }
 
-export async function GetDetailMovie(enid) {
-    const data = await fetch(`https://api.ytbvideoly.com/api/resconsume/detail?enid=${enid}&lang=ID&from_channel=11&hot_order_type=plays_pv&source_domain=layarkaca.id`,{
+export async function GetDetailMovie(enid,page=1) {
+    const data = await fetch(`https://api.ytbvideoly.com/api/resconsume/detail?enid=${enid}&page=${page}&lang=ID&from_channel=11&hot_order_type=plays_pv&source_domain=layarkaca.id&page=${page}`,{
     headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
         'Origin': 'https://layarkaca.id',
