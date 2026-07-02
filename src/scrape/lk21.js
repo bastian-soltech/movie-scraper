@@ -67,8 +67,8 @@ export async function GetStreamMovie(uk,share_id,fid) {
     }
 })
 let raw = await data.text()
-const proxyBase = "https://profesor-api.vercel.app/api/proxy/video?url=";
-    
+// Di project scraper lama kamu:
+const proxyBase = "https://proxy-project-self.vercel.app/api?url=";    
     // Regex untuk mencari link http dan membungkusnya dengan proxy
     raw = raw.replace(/(https?:\/\/data\.terabox\.com[^\s]+)/g, (match) => {
         return `${proxyBase}${encodeURIComponent(match)}`;
